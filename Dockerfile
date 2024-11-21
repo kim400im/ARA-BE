@@ -1,5 +1,5 @@
 # Node.js 기반 이미지 선택 
-FROM node:16
+FROM node:20
 
 # 앱 디렉토리 생성 및 작업 디렉토리 설정
 WORKDIR /home/node/app
