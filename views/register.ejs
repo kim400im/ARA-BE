@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <% include include/_header %>
+    <main>
+        <h2>Register</h2>
+        <form action="/perform_registration" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+    </main>
+    <% include include/_footer %>
+</body>
+</html>
