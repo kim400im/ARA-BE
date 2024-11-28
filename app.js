@@ -7,6 +7,14 @@ const dbConnect = require("./config/dbConnect");
 const expressLayouts = require("express-ejs-layouts")
 const cookieParser = require("cookie-parser")
 const methodOverride = require("method-override")
+const http = require('http')
+const path = require('path')
+const { Server } = require('socket.io')
+
+const server = http.createServer(app);
+const { addUser, getUsersInRoom, removeUser, getUser } = require('./utils/users');
+const { generateMessage } = require('./utils/messages');
+const io = new Server(server); // WebSocket 서버 생성
 
 // 필요 기능 로그인 회원가입 게시판
 // 홈 화면에 home.ejs가 들어가고 
@@ -32,16 +40,71 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 
 app.use(express.static("./public"))
+// app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cookieParser())
 app.use(methodOverride("_method"));
+
+
 
 app.use("/", require("./routes/mainRoutes"))
 app.use("/", require("./routes/authRoutes"))
 app.use("/", require("./routes/postRoutes"))
 app.use("/", require("./routes/chatRoutes"))
+app.use("/", require("./routes/openchatRoutes"))
 
 const port = 4004
+
+
+io.on('connection', (socket) => {
+  console.log('socket', socket.id);
+
+  // options는 클라가 보낸 데이터다.
+  socket.on('join', (options, callback) => {
+      const {error, user} = addUser({id: socket.id, ...options}) // 이걸 options를 받아서 addUser에 보낸다.
+
+      if (error) {
+          // callback이 chat.js에 있는 emit 함수
+          return callback(error);
+      }
+
+      socket.join(user.room)
+      // socket이 방 안에 들어간다.  user.room 안으로 추가되는 소켓
+
+      socket.emit('message', generateMessage('Admin', `${user.room} 방에 오신 걸 환영합니다`));
+      socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username}가 방에 참여했습니다`))
+
+      // user room에 있는 모든 사람에게 보내준다.
+      // room 이름과 users 목록을 전달한다. 모든 사용자에게 
+      // io 니까 서버 기준으로 함. socket이면 현재 소켓을 기준으로 함
+      io.to(user.room).emit('roomData', {
+          room: user.room,
+          users: getUsersInRoom(user.room)
+      })
+  });
+  socket.on('sendMessage', (message, callback) => {
+
+      const user = getUser(socket.id);
+      
+      io.to(user.room).emit('message', generateMessage(user.username, message));
+      callback();
+  });
+  socket.on('disconnect', () => {
+      console.log('socket disconnected', socket.id)
+      const user = removeUser(socket.id);
+
+      if (user) {
+          io.to(user.room).emit('message', generateMessage('Admin', `${user.username}가 방을 나갔습니다.`));
+          io.to(user.room).emit('roomData', {
+              room: user.room,
+              users: getUsersInRoom(user.room)
+          })
+      }
+  });
+  
+})
+
+
 
 
 app.post("/ask-llm", async (req, res) => {
@@ -73,6 +136,6 @@ app.get("/fastapi-hello", async (req, res) => {
     }
   });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`ARA-BE 서버가 ${port} 포트에서 실행 중`);
 });
