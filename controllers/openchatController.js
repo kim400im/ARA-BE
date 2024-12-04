@@ -1,11 +1,11 @@
-const mainLayout = "../views/layouts/main"
+const loginLayout = "../views/layouts/login-logout"
 
 exports.getIndex = (req, res) => {
     const locals = {
         title: "관리자 페이지"
     };
 
-    res.render('openchat/openchat', {locals, layout:mainLayout}); // 유저 입력 페이지
+    res.render('openchat/openchat', {locals, layout:loginLayout}); // 유저 입력 페이지
 };
 
 exports.getChat = (req, res) => {
@@ -16,7 +16,7 @@ exports.getChat = (req, res) => {
         console.log("redirected");
         return res.redirect('/chat'); // 잘못된 접근 방지
     }
-    res.render('openchat/room', { username, room, layout: mainLayout }); // 채팅방
+    res.render('openchat/room', { username, room, layout: loginLayout }); // 채팅방
 };
 
 exports.handlePostRoom = (req, res) => {

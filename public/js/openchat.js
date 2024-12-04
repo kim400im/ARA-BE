@@ -86,7 +86,7 @@ const room = query.get('room');
 socket.emit('join',{username, room}, (error) => {
     if (error){
         alert(error);
-        location.href='/'; 
+        location.href='/';
     }
 });
 

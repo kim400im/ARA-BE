@@ -11,6 +11,7 @@ const asynchandler = require("express-async-handler")
 router.get(["/", "/home"], asynchandler(async (req, res)=>{
     const locals = {
         title: "home",
+        isLoggedIn: req.cookies.isLoggedIn === "true",
     };
 
     // home.ejs를 mainLayout 안에 넣는다.

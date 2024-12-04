@@ -39,6 +39,13 @@ router.post("/login", asyncHandler(async (req, res)=>{
     res.redirect("/allPosts");
 }))
 
+// 로그아웃 라우트
+router.get("/logout", (req, res) => {
+    // 쿠키 삭제
+    res.clearCookie("isLoggedIn");
+    res.redirect("/home");
+});
+
 router.get("/register", asyncHandler(async (req, res)=>{
     res.render("login/register",{layout:adminLayout2})
 }))

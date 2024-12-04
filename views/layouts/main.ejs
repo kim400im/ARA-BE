@@ -24,6 +24,9 @@
             <a href="/home">Home</a>
           </li>
           <li>
+            <a href="/about">About</a>
+          </li>
+          <li>
             <a href="/chat">Chat</a>
           </li>
           <li>
@@ -34,7 +37,12 @@
 
       <!-- 관리자 로그인 -->
       <div class="header-button">
-        <a href="/login">로그인</a>
+        <!-- <a href="/login">로그인</a> -->
+        <% if (locals.isLoggedIn) { %>
+          <a href="/logout">관리자 로그아웃</a>
+        <% } else { %>
+          <a href="/login">로그인</a>
+        <% } %>
       </div>
     </header>
 
