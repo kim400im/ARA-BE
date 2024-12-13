@@ -129,6 +129,28 @@ app.post("/ask-llm", async (req, res) => {
   }
 });
 
+app.post("/ask-llm-normal", async (req, res) => {
+  const input = req.body.input;
+
+  try {
+    // ARA-LLM 서버로 요청 보내기
+    const llmResponse = await axios.post("http://localhost:8000/process_normal", {
+      question: input,
+    }, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    // ARA-LLM에서 받은 응답 출력
+    const llmData = llmResponse.data.response;
+    res.json({ response: llmData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("LLM 서버 요청 중 오류 발생");
+  }
+});
+
 app.get("/fastapi-hello", async (req, res) => {
     try {
       // FastAPI 서버의 루트 엔드포인트로 요청 보내기

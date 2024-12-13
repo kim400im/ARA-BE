@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GPT Chat</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="chat">
+    <div id="sidebar" class="chat__sidebar">
+      <!-- <h3>Uploaded Files</h3>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <label for="pdfFile">Select a PDF File</label>
+        <input type="file" id="pdfFile" name="pdfFile" accept="application/PDF" required>
+        <button type="submit">Upload</button>
+      </form>
+      <div id="alert-success" style="display: none;">File uploaded successfully</div>
+      <div id="alert-error" style="display: none;">Failed to upload file</div> -->
+    </div>
+    <div class="chat__main">
+      <div id="messages" class="chat__messages"></div>
+      <div class="form__container">
+        <form id="message-form">
+          <input name="message" placeholder="메시지를 입력하세요" required>
+          <button>전송</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script id="message-template" type="text/html">
+    <div class="message">
+      <p>
+        <span class="message__name">{{username}}</span>
+        <span class="message__meta">{{createdAt}}</span>
+      </p>
+      <p>{{message}}</p>
+    </div>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <script src="./js/normal_chat.js"></script>
+
+<!-- 
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+      event.preventDefault(); // 페이지 새로고침 방지
+
+      const formData = new FormData();
+      const fileInput = document.getElementById('pdfFile');
+      const alertSuccess = document.getElementById('alert-success');
+      const alertError = document.getElementById('alert-error');
+
+      // 초기 상태: 메시지 숨기기
+      alertSuccess.style.display = 'none';
+      alertError.style.display = 'none';
+
+      if (!fileInput.files[0]) {
+        alert("Please select a file!");
+        return;
+      }
+
+      formData.append('pdfFile', fileInput.files[0]);
+
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // FastAPI 성공 메시지 표시
+          alertSuccess.textContent = result.message;
+          alertSuccess.style.display = 'block';
+        } else {
+          throw new Error(result.error || 'Unknown error occurred');
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error.message);
+        alertError.textContent = error.message || 'Failed to upload file';
+        alertError.style.display = 'block';
+      }
+    });
+  </script> -->
+</body>
+</html>

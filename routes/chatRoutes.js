@@ -27,6 +27,14 @@ router.get('/chat', checkLogin, (req, res)=>{
     res.render('chat/chat', {locals,layout: loginLayout})
 })
 
+router.get('/normal_chat', checkLogin, (req, res)=>{
+    const locals = {
+        title: "관리자 페이지"
+    };
+
+    res.render('chat/normal_chat', {locals,layout: loginLayout})
+})
+
 const storage = multer.memoryStorage()
 
     const upload = multer({
