@@ -36,13 +36,13 @@ router.post("/login", asyncHandler(async (req, res)=>{
     res.cookie("token", token, {httpOnly: true});
 
     // res.send("success");
-    res.redirect("/allPosts");
+    res.redirect("/home");
 }))
 
 // 로그아웃 라우트
 router.get("/logout", (req, res) => {
     // 쿠키 삭제
-    res.clearCookie("isLoggedIn");
+    res.clearCookie("token");
     res.redirect("/home");
 });
 

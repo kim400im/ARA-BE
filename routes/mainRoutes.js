@@ -7,11 +7,12 @@ const asynchandler = require("express-async-handler")
 // /, /home이면 메인 화면인 main.ejs를 기본 레이아웃
 // 그리고 그 안에는 home.ejs를 안에 넣는다
 
-
 router.get(["/", "/home"], asynchandler(async (req, res)=>{
+    const token = req.cookies.token;
+    const isLoggedIn = token ? true : false; // 쿠키에 토큰이 있으면 로그인 상태
     const locals = {
         title: "home",
-        isLoggedIn: req.cookies.isLoggedIn === "true",
+        isLoggedIn: isLoggedIn, // 로그인 상태를 템플릿에 전달
     };
 
     // home.ejs를 mainLayout 안에 넣는다.
@@ -19,7 +20,9 @@ router.get(["/", "/home"], asynchandler(async (req, res)=>{
 }))
 
 router.get("/about", (req, res) => {
-    const locals = { title: "About" };
+    const token = req.cookies.token;
+    const isLoggedIn = token ? true : false; // 쿠키에 토큰이 있으면 로그인 상태
+    const locals = { title: "About", isLoggedIn: isLoggedIn };
     res.render("about", { locals, layout: mainLayout });
 });
 

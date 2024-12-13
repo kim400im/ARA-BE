@@ -113,7 +113,11 @@ app.post("/ask-llm", async (req, res) => {
   try {
     // ARA-LLM 서버로 요청 보내기
     const llmResponse = await axios.post("http://localhost:8000/process", {
-      prompt: input,
+      question: input,
+    }, {
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
 
     // ARA-LLM에서 받은 응답 출력
